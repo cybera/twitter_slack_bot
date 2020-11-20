@@ -2,6 +2,7 @@ import requests
 import os
 import json
 import pandas as pd
+import numpy as np
 
 from slack_bot import slackbot
 
@@ -22,17 +23,18 @@ def create_url(query, last_tweet = None):
     # possibly_sensitive, promoted_metrics, public_metrics, referenced_tweets,
     # source, text, and withheld
     if (query):
-        tweet_fields = "tweet.fields=author_id"
+        tweet_fields = "tweet.fields=created_at"
+        expansion_field = "expansions=author_id"
         if (last_tweet):
             since_id = "since_id=" + str(last_tweet)
             print("Accessing Last Tweet ",since_id)
-            url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}".format(
-                query, tweet_fields, since_id
+            url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}&{}&{}".format(
+                query, tweet_fields, expansion_field, since_id
             )
         else:
             print("Accessing Last 10 Tweets")
             url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}".format(
-                query, tweet_fields
+                query, tweet_fields, expansion_field
             )
 
     return url
@@ -56,16 +58,27 @@ def main():
     bearer_token = auth()
     # Send in the query string and last tweet
     query = "from:CMOH_Alberta -is:retweet"
-    since_id = 1329546200740110337
+    since_id = 1329873969940316160
 
     url = create_url(query, last_tweet = since_id)
     headers = create_headers(bearer_token)
     json_response = connect_to_endpoint(url, headers)
     if (json_response):
+        #print(json.dumps(json_response, indent=4, sort_keys=True))
         df_tweet = pd.json_normalize(json_response['data'])
-        msg=df_tweet.loc[0,'text']
+        df_name = pd.json_normalize(json_response['includes']["users"])
+        #print(df_tweet['auth'].columns)
+        #print(np.arange(df_tweet.shape[0]))
+        
+        for ind in np.arange(df_tweet.shape[0]):
+            #name = df_name["name"].value
+            #username = "(" + df_name["username"] 
+            msg= "*" + df_name.loc[0,"name"] + "*" + " (" + ":medical_symbol:"  + df_name.loc[0,"username"]  + ") \n "+ df_tweet.loc[ind,'text']
+            #msg= df_tweet.loc[ind,'text']
+            slackbot(msg)
+        #msg="Tweet from CMOH_Alberta \n "+ df_tweet.loc[0,'text']
         #print(df_tweet.loc[0,'text'])
-        slackbot(msg)
+        #slackbot(msg)
         #print(json.dumps(json_response["data"], indent=4, sort_keys=True))
     else:
         print("No Tweets exist")
