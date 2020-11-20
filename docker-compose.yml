@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  twitterbot:
+    build: bot_files
+    image: twitter_slack_bot/bot_files_1
+    command: ./run_twitter_slack_bot.py
+    environment: 
+      - TWITTER_TOKEN
+      - SLACK_BOT_TOKEN
+      - SLACK_SIGNING_SECRET
+      - SLACK_CHANNEL_NAME
+    volumes:
+      - ./bot_files/src/twitter_queries:/app/twitter_queries
+  slackbot:
+    build: bot_files
+    image: twitter_slack_bot/bot_files_2
+    command: ./slack_bot_events.py
+    ports:
+      - "3297:3297"
+    environment: 
+      - SLACK_BOT_TOKEN
+      - SLACK_SIGNING_SECRET
+    volumes:
+      - ./bot_files/src/twitter_queries:/app/twitter_queries
