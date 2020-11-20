@@ -3,12 +3,14 @@ import os
 import json
 import pandas as pd
 
+from slack_bot import slackbot
+
 # To set your enviornment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
 
 
 def auth():
-    return os.environ.get("BEARER_TOKEN")
+    return os.environ.get("BEARER_TOKEN_TWITTER")
 
 
 def create_url(query, last_tweet = None):
@@ -54,13 +56,16 @@ def main():
     bearer_token = auth()
     # Send in the query string and last tweet
     query = "from:CMOH_Alberta -is:retweet"
-    since_id = 1329466379133612032
+    since_id = 1329546200740110337
 
     url = create_url(query, last_tweet = since_id)
     headers = create_headers(bearer_token)
     json_response = connect_to_endpoint(url, headers)
     if (json_response):
-        print(pd.json_normalize(json_response['data']))
+        df_tweet = pd.json_normalize(json_response['data'])
+        msg=df_tweet.loc[0,'text']
+        #print(df_tweet.loc[0,'text'])
+        slackbot(msg)
         #print(json.dumps(json_response["data"], indent=4, sort_keys=True))
     else:
         print("No Tweets exist")
