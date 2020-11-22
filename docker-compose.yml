@@ -1,0 +1,10 @@
+version: '3.4'
+services:
+  twitter-slack-bot:
+    build: access_apis
+    image: covid_alert_bot/access_apis:latest
+    ports:
+      - "5500:5500"
+    environment: 
+      - BEARER_TOKEN_TWITTER
+      - BEARER_TOKEN_SLACK
