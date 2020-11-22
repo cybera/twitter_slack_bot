@@ -1,1 +1,2 @@
 from:CMOH_Alberta -is:retweet
+from:YourAlberta -is:retweet
