@@ -57,11 +57,10 @@ def connect_to_endpoint(url, headers):
     return response.json()
 
 
-def real_time_tweets(first_time=None, last_tweet_id=None):
+def real_time_tweets(query, first_time=None, last_tweet_id=None):
     # Access the bearer_token
     bearer_token = auth()
     # Send in the query string and last tweet
-    query = "from:CMOH_Alberta -is:retweet"
 
     if first_time:
         url = create_url(query)
@@ -96,9 +95,14 @@ def real_time_tweets(first_time=None, last_tweet_id=None):
 
 
 if __name__ == "__main__":
-    last_id = real_time_tweets(first_time=True)
+    
+    query_file = open("./sample_queries.txt", "r")
+
+    query =  query_file.read()
+
+    last_id = real_time_tweets(query, first_time=True)
     # intialize slack
     while last_id:
-        last_id = real_time_tweets(last_tweet_id=last_id)
+        last_id = real_time_tweets(query, last_tweet_id=last_id)
         print("Last refreshed for new tweets at", datetime.datetime.now())
         time.sleep(20)
