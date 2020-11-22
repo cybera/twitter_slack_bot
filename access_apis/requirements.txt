@@ -2,3 +2,4 @@ requests==2.25.0
 pandas==1.1.4
 numpy==1.19.4
 slackclient==2.9.3
+schedule==0.6.0

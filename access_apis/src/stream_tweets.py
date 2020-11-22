@@ -3,6 +3,8 @@
 import requests
 import os
 import json
+import time
+import schedule
 import pandas as pd
 import numpy as np
 
@@ -84,8 +86,10 @@ def main():
         #print(json.dumps(json_response["data"], indent=4, sort_keys=True))
     else:
         print("No Tweets exist")
-    
-
 
 if __name__ == "__main__":
-    main()
+    schedule.every(5).seconds.do(main)
+
+    while True:                                
+        schedule.run_pending()
+        time.sleep(1)
