@@ -7,6 +7,7 @@ import time
 import datetime
 import pandas as pd
 import numpy as np
+from flask import jsonify
 
 from slack_bot import slackbot
 
@@ -80,12 +81,17 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
             # print(json.dumps(json_response, indent=4, sort_keys=True))
             df_tweet = pd.json_normalize(json_response["data"])
             df_name = pd.json_normalize(json_response["includes"]["users"])
+            attachments_blocks= []
             for ind in np.arange(df_tweet.shape[0]):
-                name = "*" + df_name.loc[0, "name"] + "*"
-                username = "(" + df_name.loc[0, "username"] + ")  \n"
-                tweet_content = df_tweet.loc[ind, "text"]
-                msg = name + username + tweet_content
-                slackbot(msg)
+                if ind==0:
+                    name = "*" + df_name.loc[0, "name"] + "*"
+                    username = "(" + df_name.loc[0, "username"] + ")  \n"
+                    tweet_content = df_tweet.loc[ind, "text"]
+                    msg = name + username + tweet_content
+                else: 
+                    tweet_attachment = { "type": "section", "text": { "type": "mrkdwn", "text": df_tweet.loc[ind, "text"] } }
+                    attachments_blocks.append(tweet_attachment)
+            slackbot(msg, attachments = [{'blocks': attachments_blocks}])
             print("Latest tweets are sent in slack messages.")
             return df_tweet.loc[0, "id"]
 
