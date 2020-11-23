@@ -1,2 +1,3 @@
-from:CMOH_Alberta -is:retweet
-from:YourAlberta -is:retweet
+from:CMOH_Alberta -is:retweet 
+from:YourAlberta -is:retweet covid19ab 
+from:CityofEdmonton -is:retweet (covid19ab OR covid19)
