@@ -8,7 +8,7 @@ import datetime
 import pandas as pd
 import numpy as np
 
-from twitter_apis import create_url_recent_search, connect_to_endpoint_recent_search
+from twitter_apis import create_url_recent_search, connect_to_endpoint_recent_search, create_url_user_lookup, connect_to_endpoint_user_lookup 
 from slack_bot import slackbot
 
 # To set your enviornment variables in your terminal run the following line:
@@ -28,30 +28,35 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
     # Send in the query string and last tweet
 
     if first_time:
-        url = create_url_recent_search(query)
+        url_recent_search = create_url_recent_search(query)
         headers = create_headers(bearer_token)
-        json_response = connect_to_endpoint_recent_search(url, headers)
+        json_response = connect_to_endpoint_recent_search(url_recent_search, headers)
         if json_response:
             df_week_tweets = pd.json_normalize(json_response["data"])
             return df_week_tweets.loc[3, "id"]
 
     if last_tweet_id:
         since_id = last_tweet_id
-        url = create_url_recent_search(query, last_tweet=since_id)
+        url_recent_search = create_url_recent_search(query, last_tweet=since_id)
         headers = create_headers(bearer_token)
-        json_response = connect_to_endpoint_recent_search(url, headers)
-        tweet_count = json_response["meta"]["result_count"]
+        json_response_recent_search = connect_to_endpoint_recent_search(url_recent_search, headers)
+        tweet_count = json_response_recent_search["meta"]["result_count"]
         if tweet_count != 0:
             # print(json.dumps(json_response, indent=4, sort_keys=True))
-            df_tweet = pd.json_normalize(json_response["data"])
-            df_name = pd.json_normalize(json_response["includes"]["users"])
+            df_tweet = pd.json_normalize(json_response_recent_search["data"])
+            df_name = pd.json_normalize(json_response_recent_search["includes"]["users"])
             for ind in np.arange(df_tweet.shape[0]):
                 if ind == 0:
                     name = df_name.loc[0, "name"]
-                    username = " | _" + df_name.loc[0, "username"] + "_ |  \n"
+                    username = df_name.loc[0, "username"] 
                     tweet_content = df_tweet.loc[ind, "text"]
-                    msg = '*' + name + '*' + username + tweet_content
+                    url_user_lookup = create_url_user_lookup("usernames="+username)
+                    json_response_user_lookup = connect_to_endpoint_user_lookup(url_user_lookup, headers)
+                    df_user_description = pd.json_normalize(json_response_user_lookup["data"]) 
+                    user_description = df_user_description.loc[0,"description"]
+                    msg = '*' + name + '*' + " | _" + username + "_ | \n" + tweet_content
                     slackbot(msg)
+
                 else:
                     tweet_content = df_tweet.loc[ind, "text"]    
                     msg = tweet_content

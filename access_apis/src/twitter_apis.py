@@ -36,3 +36,25 @@ def connect_to_endpoint_recent_search(url, headers):
     return response.json()
 
 
+def create_url_user_lookup(usernames):
+    # Specify the usernames that you want to lookup below
+    # You can enter up to 100 comma-separated values.
+    #usernames = "usernames=TwitterDev,TwitterAPI"
+    user_fields = "user.fields=description,created_at"
+    # User fields are adjustable, options include:
+    # created_at, description, entities, id, location, name,
+    # pinned_tweet_id, profile_image_url, protected,
+    # public_metrics, url, username, verified, and withheld
+    url = "https://api.twitter.com/2/users/by?{}&{}".format(usernames, user_fields)
+    return url
+
+def connect_to_endpoint_user_lookup(url, headers):
+    response = requests.request("GET", url, headers=headers)
+    print(response.status_code)
+    if response.status_code != 200:
+        raise Exception(
+            "Request returned an error: {} {}".format(
+                response.status_code, response.text
+            )
+        )
+    return response.json()
