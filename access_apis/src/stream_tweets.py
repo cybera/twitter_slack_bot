@@ -81,17 +81,21 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
             # print(json.dumps(json_response, indent=4, sort_keys=True))
             df_tweet = pd.json_normalize(json_response["data"])
             df_name = pd.json_normalize(json_response["includes"]["users"])
-            attachments_blocks= []
+            attachments_blocks = []
             for ind in np.arange(df_tweet.shape[0]):
-                if ind==0:
-                    name = "*" + df_name.loc[0, "name"] + "*"
-                    username = "(" + df_name.loc[0, "username"] + ")  \n"
+                if ind == 0:
+                    name = df_name.loc[0, "name"]
+                    username = " | _" + df_name.loc[0, "username"] + "_ |  \n"
                     tweet_content = df_tweet.loc[ind, "text"]
-                    msg = name + username + tweet_content
-                else: 
-                    tweet_attachment = { "type": "section", "text": { "type": "mrkdwn", "text": df_tweet.loc[ind, "text"] } }
-                    attachments_blocks.append(tweet_attachment)
-            slackbot(msg, attachments = [{'blocks': attachments_blocks}])
+                    msg = '*' + name + '*' + username + tweet_content
+                    slackbot(msg)
+                else:
+                    tweet_content = df_tweet.loc[ind, "text"]    
+                    msg = tweet_content
+                    if (ind == (df_tweet.shape[0] - 1)):
+                        slackbot(msg, attachments=[{"blocks": [{ "type": "divider" }] }])
+                    else:
+                        slackbot(msg)
             print("Latest tweets are sent in slack messages.")
             return df_tweet.loc[0, "id"]
 
