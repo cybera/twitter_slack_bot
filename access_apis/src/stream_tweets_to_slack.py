@@ -8,7 +8,7 @@ import datetime
 import pandas as pd
 import numpy as np
 
-from twitter_apis import create_url_recent_search, connect_to_endpoint_recent_search, create_url_user_lookup, connect_to_endpoint_user_lookup 
+from twitter_apis import create_url_recent_search, connect_to_endpoint_recent_search
 from slack_bot import slackbot
 
 # To set your enviornment variables in your terminal run the following line:
@@ -39,29 +39,31 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
         since_id = last_tweet_id
         url_recent_search = create_url_recent_search(query, last_tweet=since_id)
         headers = create_headers(bearer_token)
-        json_response_recent_search = connect_to_endpoint_recent_search(url_recent_search, headers)
+        json_response_recent_search = connect_to_endpoint_recent_search(
+            url_recent_search, headers
+        )
         tweet_count = json_response_recent_search["meta"]["result_count"]
         if tweet_count != 0:
             # print(json.dumps(json_response, indent=4, sort_keys=True))
             df_tweet = pd.json_normalize(json_response_recent_search["data"])
-            df_name = pd.json_normalize(json_response_recent_search["includes"]["users"])
+            df_name = pd.json_normalize(
+                json_response_recent_search["includes"]["users"]
+            )
             for ind in np.arange(df_tweet.shape[0]):
                 if ind == 0:
                     name = df_name.loc[0, "name"]
-                    username = df_name.loc[0, "username"] 
+                    username = df_name.loc[0, "username"]
                     tweet_content = df_tweet.loc[ind, "text"]
-                    url_user_lookup = create_url_user_lookup("usernames="+username)
-                    json_response_user_lookup = connect_to_endpoint_user_lookup(url_user_lookup, headers)
-                    df_user_description = pd.json_normalize(json_response_user_lookup["data"]) 
-                    user_description = df_user_description.loc[0,"description"]
-                    msg = '*' + name + '*' + " | _" + username + "_ | \n" + tweet_content
+                    msg = (
+                        "*" + name + "*" + " | _" + username + "_ | \n" + tweet_content
+                    )
                     slackbot(msg)
 
                 else:
-                    tweet_content = df_tweet.loc[ind, "text"]    
+                    tweet_content = df_tweet.loc[ind, "text"]
                     msg = tweet_content
-                    if (ind == (df_tweet.shape[0] - 1)):
-                        slackbot(msg, attachments=[{"blocks": [{ "type": "divider" }] }])
+                    if ind == (df_tweet.shape[0] - 1):
+                        slackbot(msg, attachments=[{"blocks": [{"type": "divider"}]}])
                     else:
                         slackbot(msg)
             print("Latest tweets are sent in slack messages.")
