@@ -5,7 +5,7 @@ from slack.web.client import WebClient
 from slack.errors import SlackApiError
 
 
-def auth():
+def auth_slack():
     return os.environ.get("BEARER_TOKEN_SLACK")
 
 
@@ -19,7 +19,7 @@ def post_message_to_slack(slack_client, msg, attachments = None):
 
 
 def slackbot(msg, attachments = None):
-    slack_bot_token = auth()
+    slack_bot_token = auth_slack()
     slack_client = WebClient(slack_bot_token)
     # # For testing
     # msg = "Good Afternoon! Testing from Python script"

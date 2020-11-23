@@ -8,4 +8,4 @@ COPY src/ /app
 
 WORKDIR /app
 
-CMD ["./stream_tweets.py"]
+CMD ["./stream_tweets_to_slack.py"]
