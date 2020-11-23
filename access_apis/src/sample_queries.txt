@@ -1,3 +1,7 @@
-from:CMOH_Alberta -is:retweet 
-from:YourAlberta -is:retweet covid19ab 
-from:CityofEdmonton -is:retweet (covid19ab OR covid19)
+from:CMOH_Alberta -is:retweet  
+from:CPHO_Canada -is:retweet (%23covid19 OR %23covid19ab OR covid19 OR covid-19 OR yeg OR yyc OR alberta OR ab OR pandemic)
+from:YourAlberta -is:retweet (%23covid19AB OR %23covid19 OR cases OR school OR schools OR hospital OR hospitals OR ICU OR pandemic)    
+from:CityofEdmonton -is:retweet (%23covid19AB OR %23covid19 OR covid19 OR covid OR covid19ab OR covid-19 OR cases OR school OR schools OR hospital OR hospitals OR ICU OR health OR pandemic)
+from:cityofcalgary -is:retweet (%23covid19AB OR %23covid19 OR covid19 OR covid OR covid19ab OR covid-19 OR cases OR school OR schools OR hospital OR hospitals OR ICU OR health OR pandemic)
+from:JustinTrudeau -is:retweet %23covidalert
+from:PattyHajdu -is:retweet (%23covid19 OR %23covid19ab OR covid19 OR covid-19 OR yeg OR yyc OR alberta OR ab OR pandemic)
