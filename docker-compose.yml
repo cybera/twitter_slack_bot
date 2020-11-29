@@ -8,3 +8,4 @@ services:
     environment: 
       - BEARER_TOKEN_TWITTER
       - BEARER_TOKEN_SLACK
+      - SLACK_CHANNEL_NAME

@@ -19,6 +19,7 @@ First, we need to set the access tokens for Slack and Twitter in the environment
 cd covid19ab_twitter_slack_bot
 export BEARER_TOKEN_TWITTER=<twitter-access-token>
 export BEARER_TOKEN_SLACK=<slack-access-token>
+export SLACK_CHANNEL_NAME=<your-slack-channel-name>
 ```
 
 To initialize and run the Twitter and Slack apis, run the following command
@@ -27,4 +28,4 @@ To initialize and run the Twitter and Slack apis, run the following command
 docker-compose up --build twitter-slack-api
 ```
 
-If you have setup the access tokens correctly, you would start seeing the messages in `#testing` channel in Slack. If you wish to change the queries sent to Twitter, you can modify them at `/access-apis/src/sample-queries.txt`  
+If you have setup the access tokens correctly, you would start seeing the messages in `#your-slack-channel-name` channel in Slack. If you wish to change the queries sent to Twitter, you can modify them at `/access-apis/src/sample-queries.txt`  

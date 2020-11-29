@@ -12,7 +12,7 @@ def auth_slack():
 def post_message_to_slack(slack_client, msg, attachments = None):
 
     try:
-        slack_client.chat_postMessage(channel="#testing", text=msg, attachments = attachments)
+        slack_client.chat_postMessage(channel=os.environ.get("SLACK_CHANNEL_NAME"), text=msg, attachments = attachments)
     except SlackApiError as e:
         logging.error("Request to Slack API Failed: {}.".format(e.response.status_code))
         logging.error(e.response)
