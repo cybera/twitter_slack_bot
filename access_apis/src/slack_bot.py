@@ -1,8 +1,8 @@
 import os
 import time
 import logging
-from slack.web.client import WebClient
-from slack.errors import SlackApiError
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 
 def auth_slack():
