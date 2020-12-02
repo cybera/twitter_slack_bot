@@ -9,3 +9,4 @@ services:
       - BEARER_TOKEN_TWITTER
       - BEARER_TOKEN_SLACK
       - SLACK_CHANNEL_NAME
+      - SLACK_CHANNEL_ID

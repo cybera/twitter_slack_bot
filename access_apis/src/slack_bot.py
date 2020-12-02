@@ -18,9 +18,20 @@ def post_message_to_slack(slack_client, msg, attachments = None):
         logging.error(e.response)
 
 
+def retrieve_messages_from_slack(slack_client):
+
+    try:
+        return slack_client.conversations_history(channel=os.environ.get("SLACK_CHANNEL_ID"), oldest = 1606772429.008200)
+    except SlackApiError as e:
+        logging.error("Request to Slack API Failed: {}.".format(e.response.status_code))
+        logging.error(e.response)
+
+
 def slackbot(msg, attachments = None):
     slack_bot_token = auth_slack()
     slack_client = WebClient(slack_bot_token)
     # # For testing
     # msg = "Good Afternoon! Testing from Python script"
     post_message_to_slack(slack_client, msg, attachments)
+    response = retrieve_messages_from_slack(slack_client)
+    print(response)
