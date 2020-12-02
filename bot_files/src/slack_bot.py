@@ -34,4 +34,4 @@ def slackbot(msg, attachments = None):
     # msg = "Good Afternoon! Testing from Python script"
     post_message_to_slack(slack_client, msg, attachments)
     response = retrieve_messages_from_slack(slack_client)
-    print(response)
+    #print(response)

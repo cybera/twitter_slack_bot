@@ -1,8 +1,8 @@
 version: '3.4'
 services:
-  twitter-slack-api:
-    build: access_apis
-    image: covid19ab_twitter_slack_bot/access_apis:latest
+  twitter-slack-bot:
+    build: bot_files
+    image: covid19ab_twitter_slack_bot/bot_files:latest
     ports:
       - "5500:5500"
     environment: 
