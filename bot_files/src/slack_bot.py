@@ -27,11 +27,15 @@ def retrieve_messages_from_slack(slack_client):
         logging.error(e.response)
 
 
-def slackbot(msg, attachments = None):
+def slackbot(action_string,msg = None, attachments = None):
     slack_bot_token = auth_slack()
     slack_client = WebClient(slack_bot_token)
     # # For testing
     # msg = "Good Afternoon! Testing from Python script"
-    post_message_to_slack(slack_client, msg, attachments)
-    response = retrieve_messages_from_slack(slack_client)
-    #print(response)
+    
+    if action_string == "post_message":
+        post_message_to_slack(slack_client, msg, attachments)
+    if action_string == "retrieve_message":
+        response = retrieve_messages_from_slack(slack_client)
+        return response
+        #print(response)

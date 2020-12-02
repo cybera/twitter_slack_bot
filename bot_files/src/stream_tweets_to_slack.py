@@ -23,6 +23,8 @@ def create_headers(bearer_token):
 def real_time_tweets(query, first_time=None, last_tweet_id=None):
     # Access the bearer_token
     bearer_token = auth()
+    # Set action_string to post_message
+    action_string = "post_message"
     # Send in the query string and last tweet
 
     if first_time:
@@ -55,15 +57,15 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
                     msg = (
                         "*" + name + "*" + " | _" + username + "_ | \n" + tweet_content
                     )
-                    slackbot(msg)
+                    slackbot(action_string, msg)
 
                 else:
                     tweet_content = df_tweet.loc[ind, "text"]
                     msg = tweet_content
                     if ind == (df_tweet.shape[0] - 1):
-                        slackbot(msg, attachments=[{"blocks": [{"type": "divider"}]}])
+                        slackbot(action_string, msg, attachments=[{"blocks": [{"type": "divider"}]}])
                     else:
-                        slackbot(msg)
+                        slackbot(action_string, msg)
             print("Latest tweets are sent in slack messages.")
             return df_tweet.loc[0, "id"]
 
