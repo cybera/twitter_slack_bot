@@ -13,6 +13,7 @@ if __name__ == "__main__":
     query_file_path = "./sample_queries.txt"
     
     init_first_time = True
+    init_new_query = False
     bot_id = os.environ.get("SLACK_BOT_ID")
     now = datetime.now()
     timestampnow = datetime.timestamp(now)
@@ -20,17 +21,31 @@ if __name__ == "__main__":
 
     while True:
         print(datetime.now())
-        if init_first_time:
-            init_first_time = False
+        if (init_first_time) or (init_new_query):
+         
+
             with open(query_file_path, "r") as f:
                 query_content = f.readlines()
             query_list = [x.strip() for x in query_content]
-        
-            list_last_ids = np.array([])
-            print("Initializing all queries for the first time")
-            for query in query_list:
-                last_id = real_time_tweets(query, first_time=True)
-                list_last_ids = np.append(list_last_ids, last_id)
+
+            if init_first_time:
+                tot_size_first_time = len(query_list)
+                list_last_ids = np.array([])
+                print("Initializing all queries for the first time")
+                for query in query_list:
+                    last_id = real_time_tweets(query, first_time=True)
+                    list_last_ids = np.append(list_last_ids, last_id)
+
+            if init_new_query:
+                new_query_list = query_list[tot_size_first_time:]
+                print("Initializing the new queries for the first time")
+                for new_query in new_query_list:
+                    last_id = real_time_tweets(new_query, first_time=True)
+                    list_last_ids = np.append(list_last_ids, last_id)
+
+            init_first_time = False
+            init_new_query = False 
+
 
         ind_flag = 0
         for query in query_list:
@@ -38,7 +53,7 @@ if __name__ == "__main__":
             if last_id != list_last_ids[ind_flag]:
                 list_last_ids[ind_flag] = last_id
             ind_flag += 1
-
+        
         #print("Last refreshed for new tweets at", datetime.datetime.now())
 
         # Check to see if an user has sent a message
@@ -59,5 +74,6 @@ if __name__ == "__main__":
                 for query_new in query_new_list:
                     with open(query_file_path, "a") as queryfile:
                         queryfile.write('\n'+query_new)
+                init_new_query = True
 
         time.sleep(20)
