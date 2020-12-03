@@ -31,9 +31,12 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
         url_recent_search = create_url_recent_search(query)
         headers = create_headers(bearer_token)
         json_response = connect_to_endpoint_recent_search(url_recent_search, headers)
-        if json_response:
+        first_tweet_count = json_response["meta"]["result_count"]
+        if first_tweet_count != 0:
             df_week_tweets = pd.json_normalize(json_response["data"])
             return df_week_tweets.loc[3, "id"]
+        else:
+            return "Invalid Input"
 
     if last_tweet_id:
         since_id = last_tweet_id
@@ -63,7 +66,11 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
                     tweet_content = df_tweet.loc[ind, "text"]
                     msg = tweet_content
                     if ind == (df_tweet.shape[0] - 1):
-                        slackbot(action_string, msg, attachments=[{"blocks": [{"type": "divider"}]}])
+                        slackbot(
+                            action_string,
+                            msg,
+                            attachments=[{"blocks": [{"type": "divider"}]}],
+                        )
                     else:
                         slackbot(action_string, msg)
             print("Latest tweets are sent in slack messages.")
