@@ -18,7 +18,6 @@ if __name__ == "__main__":
     timestampnow = datetime.timestamp(now)
 
     while True:
-        print(datetime.now())
         if (init_first_time) or (init_new_query):
             with open(query_file_path, "r") as f:
                 query_content = f.readlines()
@@ -35,12 +34,11 @@ if __name__ == "__main__":
             if init_new_query:
                 new_query_list = query_list[tot_size_first_time:]
                 tot_size_first_time = len(new_query_list) + tot_size_first_time
-                print(new_query_list)
                 print("Initializing the new queries for the first time")
                 for new_query in new_query_list:
                     last_id = real_time_tweets(new_query, first_time=True)
                     if last_id == "Invalid Input":
-                        slackbot("post_message", msg="Invlaid query try again")
+                        slackbot("post_message", msg="Invalid query try again")
                         list_last_ids = np.append(list_last_ids, "1111111111111111111")
                     else:
                         list_last_ids = np.append(list_last_ids, last_id)
@@ -48,9 +46,7 @@ if __name__ == "__main__":
             init_first_time = False
             init_new_query = False
 
-        print(list_last_ids)
-        print(query_list)
-        print(tot_size_first_time)
+
         ind_flag = 0
         for query in query_list:
             if list_last_ids[ind_flag] != "1111111111111111111":
