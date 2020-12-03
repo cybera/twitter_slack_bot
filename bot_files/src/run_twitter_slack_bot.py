@@ -75,4 +75,4 @@ if __name__ == "__main__":
                         queryfile.write("\n" + query_new)
                 init_new_query = True
 
-        time.sleep(10)
+        time.sleep(5)
