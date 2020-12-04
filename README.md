@@ -21,7 +21,6 @@ export BEARER_TOKEN_TWITTER=<twitter-access-token>
 export BEARER_TOKEN_SLACK=<slack-access-token>
 export SLACK_CHANNEL_NAME=<your-slack-channel-name>
 export SLACK_CHANNEL_ID= <your-slack-channel-id>
-export SLACK_BOT_ID=<your-slack-bot-id>
 ```
 
 To initialize and run the Twitter and Slack bot, run the following command

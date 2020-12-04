@@ -63,7 +63,7 @@ if __name__ == "__main__":
         response = slackbot("retrieve_message", time_stamp=timestampnow)
         df_response = pd.json_normalize(response["messages"])
         if not (df_response.empty):
-            df_response = df_response[~df_response["user"].str.contains(bot_id)]
+            df_response = df_response[df_response['bot_id'].isna()]
             if not (df_response.empty):
                 query_new_list = df_response["text"].tolist()
                 user_list = df_response["user"].tolist()
