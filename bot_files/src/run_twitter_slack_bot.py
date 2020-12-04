@@ -10,7 +10,10 @@ from slack_bot import slackbot
 
 if __name__ == "__main__":
 
-    query_file_path = "./twitter_queries.txt"
+    # In container
+    query_file_path = "/app/twitter_queries/twitter_queries.txt"
+    # In normal environment
+    #query_file_path = "twitter_queries/twitter_queries.txt"
     init_first_time = True
     init_new_query = False
     bot_id = os.environ.get("SLACK_BOT_ID")

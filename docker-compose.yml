@@ -10,3 +10,5 @@ services:
       - BEARER_TOKEN_SLACK
       - SLACK_CHANNEL_NAME
       - SLACK_CHANNEL_ID
+    volumes:
+      - ./bot_files/src/twitter_queries:/app/twitter_queries
