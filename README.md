@@ -13,19 +13,20 @@ This repo is run and tested in Macbook Pro (16inch, 2016) Model. However, it sho
 
 ## Set-up
 
-First, we need to set the access tokens for Slack and Twitter in the environment variables.
+First, we need to set the access tokens for Slack and Twitter in the environment variables. You would also need to specify the slack channel name, ids of the channel and the bot. 
 
 ```bash
 cd covid19ab_twitter_slack_bot
 export BEARER_TOKEN_TWITTER=<twitter-access-token>
 export BEARER_TOKEN_SLACK=<slack-access-token>
 export SLACK_CHANNEL_NAME=<your-slack-channel-name>
+export SLACK_CHANNEL_ID= <your-slack-channel-id>
 ```
 
-To initialize and run the Twitter and Slack apis, run the following command
+To initialize and run the Twitter and Slack bot, run the following command
 
 ```bash
-docker-compose up --build twitter-slack-api
+docker-compose up --build twitter-slack-bot
 ```
 
-If you have setup the access tokens correctly, you would start seeing the messages in `#your-slack-channel-name` channel in Slack. If you wish to change the queries sent to Twitter, you can modify them at `/access-apis/src/sample-queries.txt`  
+If you have setup the access tokens correctly with exact credentials for the slack, you would start seeing the messages in `#your-slack-channel-name` channel in Slack. If you wish to change the queries sent to Twitter, you can send the queries as the slack message.  
