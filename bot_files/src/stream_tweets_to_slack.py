@@ -10,7 +10,7 @@ from slack_bot import slackbot
 
 # To set your enviornment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
-def auth():
+def auth_twitter():
     return os.environ.get("BEARER_TOKEN_TWITTER")
 
 
@@ -21,7 +21,7 @@ def create_headers(bearer_token):
 
 def real_time_tweets(query, first_time=None, last_tweet_id=None):
     # Access the bearer_token
-    bearer_token = auth()
+    bearer_token = auth_twitter()
     # Send in the query string and last tweet
 
     if first_time:
@@ -73,4 +73,4 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
 
         else:
             print("No new tweets exist.")
-            return since_id
+            return last_tweet_id
