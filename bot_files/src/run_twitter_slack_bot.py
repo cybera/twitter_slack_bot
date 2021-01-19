@@ -30,13 +30,19 @@ def call_twitter_slack_apis(query_list, list_last_ids):
 
     return list_last_ids
 
+def query_file_path():
+    # In container
+    # query_file_path = "/app/twitter_queries/twitter_queries.txt"
+    # In normal environment
+    #query_file_path = "twitter_queries/twitter_queries.txt"
+    return "twitter_queries/twitter_queries.txt"
 
 if __name__ == "__main__":
 
     # In container
     # query_file_path = "/app/twitter_queries/twitter_queries.txt"
     # In normal environment
-    query_file_path = "twitter_queries/twitter_queries.txt"
+    file_path = query_file_path()
     flag_first_time = True
     now = datetime.now()
     timestampnow = datetime.timestamp(now)
@@ -44,7 +50,7 @@ if __name__ == "__main__":
     while True:
 
         if flag_first_time:
-            with open(query_file_path, "r") as f:
+            with open(file_path, "r") as f:
                 query_content = f.readlines()
             query_list = [x.strip() for x in query_content]
 
