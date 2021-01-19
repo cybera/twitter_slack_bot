@@ -8,4 +8,4 @@ COPY src/ /app
 
 WORKDIR /app
 
-CMD ["./run_twitter_slack_bot.py"]
+CMD ls input

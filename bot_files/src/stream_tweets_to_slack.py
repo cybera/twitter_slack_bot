@@ -11,7 +11,7 @@ from slack_bot import slackbot
 # To set your enviornment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
 def auth_twitter():
-    return os.environ.get("BEARER_TOKEN_TWITTER")
+    return os.environ.get("TWITTER_TOKEN")
 
 
 def create_headers(bearer_token):
