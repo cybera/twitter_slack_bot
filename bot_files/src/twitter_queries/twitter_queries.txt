@@ -1,2 +1,0 @@
-from:CMOH_Alberta -is:retweet  
-from:CPHO_Canada -is:retweet (%23covid19 OR %23covid19ab OR covid19 OR covid-19 OR yeg OR yyc OR alberta OR ab OR pandemic)
