@@ -1,4 +1,5 @@
 requests==2.25.0
-pandas==1.1.4
 numpy==1.19.4
 slack-sdk==3.0.0
+Flask==1.1.1
+slackeventsapi==2.2.1

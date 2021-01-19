@@ -3,7 +3,6 @@
 import requests
 import os
 import json
-import pandas as pd
 import numpy as np
 
 from twitter_apis import create_url_recent_search, connect_to_endpoint_recent_search
@@ -11,8 +10,8 @@ from slack_bot import slackbot
 
 # To set your enviornment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
-def auth():
-    return os.environ.get("BEARER_TOKEN_TWITTER")
+def auth_twitter():
+    return os.environ.get("TWITTER_TOKEN")
 
 
 def create_headers(bearer_token):
@@ -22,60 +21,56 @@ def create_headers(bearer_token):
 
 def real_time_tweets(query, first_time=None, last_tweet_id=None):
     # Access the bearer_token
-    bearer_token = auth()
-    # Set action_string to post_message
-    action_string = "post_message"
+    bearer_token = auth_twitter()
     # Send in the query string and last tweet
 
     if first_time:
         url_recent_search = create_url_recent_search(query)
         headers = create_headers(bearer_token)
-        json_response = connect_to_endpoint_recent_search(url_recent_search, headers)
-        first_tweet_count = json_response["meta"]["result_count"]
-        if first_tweet_count != 0:
-            df_week_tweets = pd.json_normalize(json_response["data"])
-            return df_week_tweets.loc[3, "id"]
-        else:
-            return "Invalid Input"
-
-    if last_tweet_id:
-        since_id = last_tweet_id
-        url_recent_search = create_url_recent_search(query, last_tweet=since_id)
-        headers = create_headers(bearer_token)
-        json_response_recent_search = connect_to_endpoint_recent_search(
+        response_dict_recent_search = connect_to_endpoint_recent_search(
             url_recent_search, headers
         )
-        tweet_count = json_response_recent_search["meta"]["result_count"]
+        tweet_count = response_dict_recent_search["meta"]["result_count"]
         if tweet_count != 0:
-            # print(json.dumps(json_response, indent=4, sort_keys=True))
-            df_tweet = pd.json_normalize(json_response_recent_search["data"])
-            df_name = pd.json_normalize(
-                json_response_recent_search["includes"]["users"]
-            )
-            for ind in np.arange(df_tweet.shape[0]):
+            return response_dict_recent_search["data"][2]["id"]
+        else:
+            return "1111111111111111111"
+
+    if last_tweet_id:
+        url_recent_search = create_url_recent_search(query, last_tweet=last_tweet_id)
+        headers = create_headers(bearer_token)
+
+        response_dict_recent_search = connect_to_endpoint_recent_search(
+            url_recent_search, headers
+        )
+
+        tweet_count = response_dict_recent_search["meta"]["result_count"]
+
+        if tweet_count != 0:
+
+            name = response_dict_recent_search["includes"]["users"][0]["name"]
+            username = response_dict_recent_search["includes"]["users"][0]["username"]
+
+            for ind in range(len(response_dict_recent_search["data"])):
+                tweet_content = response_dict_recent_search["data"][ind]["text"]
                 if ind == 0:
-                    name = df_name.loc[0, "name"]
-                    username = df_name.loc[0, "username"]
-                    tweet_content = df_tweet.loc[ind, "text"]
                     msg = (
                         "*" + name + "*" + " | _" + username + "_ | \n" + tweet_content
                     )
-                    slackbot(action_string, msg)
-
+                    slackbot(msg)
                 else:
-                    tweet_content = df_tweet.loc[ind, "text"]
                     msg = tweet_content
-                    if ind == (df_tweet.shape[0] - 1):
+                    if ind == (len(response_dict_recent_search["data"]) - 1):
                         slackbot(
-                            action_string,
                             msg,
                             attachments=[{"blocks": [{"type": "divider"}]}],
                         )
                     else:
-                        slackbot(action_string, msg)
+                        slackbot(msg)
+
             print("Latest tweets are sent in slack messages.")
-            return df_tweet.loc[0, "id"]
+            return response_dict_recent_search["meta"]["newest_id"]
 
         else:
             print("No new tweets exist.")
-            return since_id
+            return last_tweet_id

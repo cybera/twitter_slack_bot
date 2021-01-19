@@ -27,7 +27,6 @@ def create_url_recent_search(query, last_tweet=None):
     return url
 
 
-
 def connect_to_endpoint_recent_search(url, headers):
     response = requests.request("GET", url, headers=headers)
     print(response.status_code)
@@ -39,7 +38,7 @@ def connect_to_endpoint_recent_search(url, headers):
 def create_url_user_lookup(usernames):
     # Specify the usernames that you want to lookup below
     # You can enter up to 100 comma-separated values.
-    #usernames = "usernames=TwitterDev,TwitterAPI"
+    # usernames = "usernames=TwitterDev,TwitterAPI"
     user_fields = "user.fields=description,created_at"
     # User fields are adjustable, options include:
     # created_at, description, entities, id, location, name,
@@ -47,6 +46,7 @@ def create_url_user_lookup(usernames):
     # public_metrics, url, username, verified, and withheld
     url = "https://api.twitter.com/2/users/by?{}&{}".format(usernames, user_fields)
     return url
+
 
 def connect_to_endpoint_user_lookup(url, headers):
     response = requests.request("GET", url, headers=headers)

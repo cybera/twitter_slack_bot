@@ -6,36 +6,33 @@ from slack_sdk.errors import SlackApiError
 
 
 def auth_slack():
-    return os.environ.get("BEARER_TOKEN_SLACK")
+    return os.environ.get("SLACK_BOT_TOKEN")
 
 
-def post_message_to_slack(slack_client, msg, attachments = None):
-
-    try:
-        slack_client.chat_postMessage(channel=os.environ.get("SLACK_CHANNEL_NAME"), text=msg, attachments = attachments)
-    except SlackApiError as e:
-        logging.error("Request to Slack API Failed: {}.".format(e.response.status_code))
-        logging.error(e.response)
-
-
-def retrieve_messages_from_slack(slack_client, ts_old):
+def post_message_to_slack(slack_client, msg, attachments=None, channel_id=None):
 
     try:
-        return slack_client.conversations_history(channel=os.environ.get("SLACK_CHANNEL_ID"), oldest = ts_old)
+        if channel_id:
+            slack_client.chat_postMessage(
+                channel=channel_id,
+                text=msg,
+                attachments=attachments,
+            )
+        else:
+            slack_client.chat_postMessage(
+                channel=os.environ.get("SLACK_CHANNEL_NAME"),
+                text=msg,
+                attachments=attachments,
+            )
     except SlackApiError as e:
-        logging.error("Request to Slack API Failed: {}.".format(e.response.status_code))
-        logging.error(e.response)
+        # You will get a SlackApiError if "ok" is False
+        assert e.response["ok"] is False
+        assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+        print(f"Got an error: {e.response['error']}")
 
 
-def slackbot(action_string,msg = None, attachments = None, time_stamp = None):
+def slackbot(msg, attachments=None, channel_id=None):
+
     slack_bot_token = auth_slack()
     slack_client = WebClient(slack_bot_token)
-    # # For testing
-    # msg = "Good Afternoon! Testing from Python script"
-    
-    if action_string == "post_message":
-        post_message_to_slack(slack_client, msg, attachments)
-    if action_string == "retrieve_message":
-        response = retrieve_messages_from_slack(slack_client, time_stamp)
-        return response
-        #print(response)
+    post_message_to_slack(slack_client, msg, attachments, channel_id)
