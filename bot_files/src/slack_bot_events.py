@@ -14,6 +14,7 @@ slack_event_adapter = SlackEventAdapter(
 
 file_path = query_file_path()
 
+
 def process_incoming_bot_message(channel_id, text):
     text = re.sub(r"\<.*?\>", "", text)
     if text[0:6].strip() == "from:":

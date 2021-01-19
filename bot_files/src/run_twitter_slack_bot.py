@@ -30,12 +30,14 @@ def call_twitter_slack_apis(query_list, list_last_ids):
 
     return list_last_ids
 
+
 def query_file_path():
     # In container
     # query_file_path = "/app/twitter_queries/twitter_queries.txt"
     # In normal environment
-    #query_file_path = "twitter_queries/twitter_queries.txt"
+    # query_file_path = "twitter_queries/twitter_queries.txt"
     return "twitter_queries/twitter_queries.txt"
+
 
 if __name__ == "__main__":
 

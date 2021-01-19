@@ -30,6 +30,7 @@ def post_message_to_slack(slack_client, msg, attachments=None, channel_id=None):
         assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
         print(f"Got an error: {e.response['error']}")
 
+
 def slackbot(msg, attachments=None, channel_id=None):
 
     slack_bot_token = auth_slack()
