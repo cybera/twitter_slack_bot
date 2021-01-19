@@ -51,15 +51,22 @@ if __name__ == "__main__":
 
     while True:
 
+        with open(file_path, "r") as f:
+            query_content = f.readlines()
+        query_list = [x.strip() for x in query_content]
+
         if flag_first_time:
-            with open(file_path, "r") as f:
-                query_content = f.readlines()
-            query_list = [x.strip() for x in query_content]
-
-            if flag_first_time:
-                list_last_ids = init_first_time(query_list)
-
+            tot_size = len(query_list)
+            list_last_ids = init_first_time(query_list)
             flag_first_time = False
+
+        tot_size_new = len(query_list)
+
+        if tot_size_new > tot_size:
+            new_query_list = query_list[tot_size:]
+            tot_size = tot_size_new
+            list_new_last_ids = init_first_time(new_query_list)
+            list_last_ids = np.append(list_last_ids, list_new_last_ids)
 
         list_last_ids = call_twitter_slack_apis(query_list, list_last_ids)
 
