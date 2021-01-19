@@ -36,7 +36,7 @@ def query_file_path():
     # query_file_path = "/app/twitter_queries/twitter_queries.txt"
     # In normal environment
     # query_file_path = "twitter_queries/twitter_queries.txt"
-    return "twitter_queries/twitter_queries.txt"
+    return "/app/twitter_queries/twitter_queries.txt"
 
 
 if __name__ == "__main__":

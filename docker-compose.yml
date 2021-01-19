@@ -1,14 +1,26 @@
 version: '3.4'
 services:
-  twitter-slack-bot:
+  twitter:
     build: bot_files
     image: covid19ab_twitter_slack_bot/bot_files:latest
-    ports:
-      - "5500:5500"
+    command: ./run_twitter_slack_bot.py
     environment: 
       - BEARER_TOKEN_TWITTER
-      - BEARER_TOKEN_SLACK
+      - SLACK_BOT_TOKEN
+      - SLACK_SIGNING_SECRET
       - SLACK_CHANNEL_NAME
-      - SLACK_CHANNEL_ID
+    volumes:
+      - ./bot_files/src/twitter_queries:/app/twitter_queries
+  slack:
+    build: bot_files
+    image: covid19ab_twitter_slack_bot/bot_files:latest
+    command: ./slack_bot_events.py
+    ports:
+      - "6789:6789"
+    environment: 
+      - BEARER_TOKEN_TWITTER
+      - SLACK_BOT_TOKEN
+      - SLACK_SIGNING_SECRET
+      - SLACK_CHANNEL_NAME
     volumes:
       - ./bot_files/src/twitter_queries:/app/twitter_queries

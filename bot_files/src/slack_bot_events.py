@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from slack_sdk import WebClient
 import os
 from flask import Flask
