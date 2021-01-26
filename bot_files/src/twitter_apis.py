@@ -11,7 +11,7 @@ def create_url_recent_search(query, last_tweet=None):
     # source, text, and withheld
     if query:
         tweet_fields = "tweet.fields=created_at"
-        expansion_field = "expansions=author_id"
+        expansion_field = "expansions=author_id,referenced_tweets.id"
         if last_tweet:
             since_id = "since_id=" + str(last_tweet)
             print("Accessing Last Tweet ", since_id)
