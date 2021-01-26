@@ -70,4 +70,4 @@ if __name__ == "__main__":
 
         list_last_ids = call_twitter_slack_apis(query_list, list_last_ids)
 
-        time.sleep(5)
+        time.sleep(60*10)

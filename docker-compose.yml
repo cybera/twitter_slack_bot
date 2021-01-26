@@ -16,7 +16,7 @@ services:
     image: twitter_slack_bot/bot_files_2
     command: ./slack_bot_events.py
     ports:
-      - "6789:6789"
+      - "3297:3297"
     environment: 
       - SLACK_BOT_TOKEN
       - SLACK_SIGNING_SECRET

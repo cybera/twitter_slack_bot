@@ -32,7 +32,7 @@ def real_time_tweets(query, first_time=None, last_tweet_id=None):
         )
         tweet_count = response_dict_recent_search["meta"]["result_count"]
         if tweet_count != 0:
-            return response_dict_recent_search["data"][2]["id"]
+            return response_dict_recent_search["data"][0]["id"]
         else:
             return "1111111111111111111"
 
